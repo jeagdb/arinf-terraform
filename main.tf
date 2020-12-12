@@ -36,9 +36,24 @@ module "ec2" {
   private_instance_count = 4
 }
 
+module "lb" {
+  source = "./lb"
+  vpc_id = module.vpc.vpc_id
+  subnet1 = module.vpc.private_subnet1
+  subnet2 = module.vpc.private_subnet2
+}
+
 module "route53" {
   source   = "./route53"
   hostname = ["test1", "test2"]
   arecord  = ["10.0.1.11", "10.0.1.12"]
   vpc_id   = module.vpc.vpc_id
+}
+
+module "auto_scaling" {
+  source           = "./auto_scaling"
+  vpc_id           = "${module.vpc.vpc_id}"
+  subnet1          = "${module.vpc.subnet1}"
+  subnet2          = "${module.vpc.subnet2}"
+  target_group_arn = "${module.alb.alb_target_group_arn}"
 }
