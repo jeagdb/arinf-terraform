@@ -26,4 +26,7 @@ resource "aws_s3_bucket" "front-app" {
   website {
     index_document = "index.html"
   }
+  tags = {
+    Name = "bucket-front"
+  }
 }

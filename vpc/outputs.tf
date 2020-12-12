@@ -2,6 +2,10 @@ output "private_subnets" {
   value = aws_subnet.private_subnet.*.id
 }
 
+output "public_subnets" {
+  value = aws_subnet.public_subnet.*.id
+}
+
 output "security_group" {
   value = aws_security_group.vpc_sg.id
 }
@@ -24,4 +28,12 @@ output "private_subnet1" {
 
 output "private_subnet2" {
   value = element(aws_subnet.private_subnet.*.id, 2 )
+}
+
+output "private_subnet3" {
+  value = element(aws_subnet.private_subnet.*.id, 3 )
+}
+
+output "private_subnet4" {
+  value = element(aws_subnet.private_subnet.*.id, 4 )
 }

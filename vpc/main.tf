@@ -22,7 +22,7 @@ resource "aws_default_route_table" "private_route" {
 }
 
 resource "aws_route_table_association" "private_subnet_assoc" {
-  count = 2
+  count = 4
   route_table_id = aws_default_route_table.private_route.id
   subnet_id = aws_subnet.private_subnet.*.id[count.index]
   depends_on = [aws_default_route_table.private_route, aws_subnet.private_subnet]
@@ -34,13 +34,19 @@ resource "aws_subnet" "public_subnet" {
   vpc_id = aws_vpc.main.id
   map_public_ip_on_launch = true
   availability_zone = data.aws_availability_zones.available.names[count.index]
+  tags = {
+    Name = "public subnet ${count.index}"
+  }
 }
 
 resource "aws_subnet" "private_subnet" {
-  count = 2
+  count = 4
   cidr_block = var.private_cidrs[count.index]
   vpc_id = aws_vpc.main.id
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index % 2]
+  tags = {
+    Name = "private subnet ${count.index}"
+  }
 }
 
 //pare-feu virtuel pour notre vpc afin de contrôler le trafic entrant et sortant.

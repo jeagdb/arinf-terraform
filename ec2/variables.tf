@@ -4,6 +4,13 @@ variable "instance_type" {}
 
 variable "security_group" {}
 
-variable "subnets" {
+variable "public_subnets" {
   type = list
 }
+
+variable "private_subnets" {
+  type = list
+}
+
+variable "public_instance_count" {}
+variable "private_instance_count" {}
