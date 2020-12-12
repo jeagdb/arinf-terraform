@@ -10,11 +10,11 @@ provider "aws" {
 // déclaration des différents modules
 // bucket S3 pour héberger notre front react 
 // EXCLUSIF Platform 3
-/*
+
 module "s3" {
   source = "./s3"
 }
-*/
+
 // vpc -> endroit isolé du cloud pour mettre en place des ressources aws dans un réseau virtuel
 module "vpc" {
   source = "./vpc"
