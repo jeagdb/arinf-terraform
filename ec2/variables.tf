@@ -8,10 +8,10 @@ variable "public_subnets" {
   type = list
 }
 
-/*
+
 variable "private_subnets" {
   type = list
-}*/
+}
 
 variable "public_instance_count" {}
-//variable "private_instance_count" {}
+variable "private_instance_count" {}

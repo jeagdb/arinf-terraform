@@ -9,10 +9,9 @@ data "template_file" "init" {
   template = file("${path.module}/userdata.tpl")
 }
 
-/*
 resource "aws_instance" "back" {
   count = var.private_instance_count
-  ami = "ami-0c3d23d707737957d"
+  ami = "ami-0d3f551818b21ed81"
   instance_type = var.instance_type
   key_name = aws_key_pair.admin.id
   vpc_security_group_ids = [var.security_group]
@@ -21,7 +20,7 @@ resource "aws_instance" "back" {
   tags = {
     Name = "backend ec2 ${count.index}"
   }
-}*/
+}
 
 resource "aws_instance" "front" {
   count = var.public_instance_count

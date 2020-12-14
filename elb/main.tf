@@ -2,7 +2,7 @@ resource "aws_elb" "app-elb" {
   name = "app-elb"
 
   subnets = var.subnets
-  security_groups = [aws_security_group.elb-sg.id]
+  security_groups = [var.security_group, aws_security_group.elb_sg.id]
 
   listener {
     instance_port = 80
@@ -28,36 +28,23 @@ resource "aws_elb" "app-elb" {
   tags = {
     Name = "app-elb"
   }
+
 }
 
-resource "aws_security_group" "elb-sg" {
+resource "aws_security_group" "elb_sg" {
   name = "elb-sg"
   vpc_id = var.vpc_id
-}
-
-resource "aws_security_group_rule" "inbound_ssh" {
-  from_port = 22
-  protocol = "tcp"
-  security_group_id = aws_security_group.elb-sg.id
-  to_port = 22
-  type = "ingress"
-  cidr_blocks = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "inbound_http" {
-  from_port = 80
-  protocol = "tcp"
-  security_group_id = aws_security_group.elb-sg.id
-  to_port = 80
-  type = "ingress"
-  cidr_blocks = ["0.0.0.0/0"]
-}
-
-resource "aws_security_group_rule" "outbound_all" {
-  from_port = 0
-  protocol = "-1"
-  security_group_id = aws_security_group.elb-sg.id
-  to_port = 0
-  type = "egress"
-  cidr_blocks = ["0.0.0.0/0"]
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "AWS default egress rule"
+  }
 }

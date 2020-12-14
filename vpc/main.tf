@@ -49,7 +49,7 @@ resource "aws_route_table" "public_route" {
     Name = "public route table"
   }
 }
-
+/*
 // table de routing privé
 resource "aws_route_table" "private_route" {
   vpc_id = aws_vpc.main.id
@@ -62,7 +62,7 @@ resource "aws_route_table" "private_route" {
   tags = {
     Name = "private route table"
   }
-}
+}*/
 
 // Association routes publiques
 resource "aws_route_table_association" "public_subnet_assoc" {
@@ -72,13 +72,14 @@ resource "aws_route_table_association" "public_subnet_assoc" {
   depends_on = [aws_route_table.public_route, aws_subnet.public_subnet]
 }
 
+/*
 // Association routes privées
 resource "aws_route_table_association" "private_subnet_assoc" {
   count = 4
   route_table_id = aws_route_table.private_route.id
   subnet_id = aws_subnet.private_subnet.*.id[count.index]
   depends_on = [aws_route_table.private_route, aws_subnet.private_subnet]
-}
+}*/
 
 
 //pare-feu virtuel pour notre vpc afin de contrôler le trafic entrant et sortant.
@@ -104,11 +105,12 @@ resource "aws_security_group" "vpc_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  /*
   ingress {
     description = "TLS from VPC"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }
+  }*/
 }

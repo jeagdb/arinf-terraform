@@ -7,3 +7,6 @@ variable "subnets" {
 variable "instances" {
   type = list
 }
+
+variable "security_group" {
+}
