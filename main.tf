@@ -25,6 +25,7 @@ module "vpc" {
 }
 
 // instance ec2 -> ici qu'on va placer notre front
+/*
 module "ec2" {
   source = "./ec2"
   my_public_key = "./tmp/id_rsa.pub"
@@ -32,10 +33,7 @@ module "ec2" {
   security_group = module.vpc.security_group
   public_subnets = module.vpc.public_subnets
 }
-
-// (! P3 !) load balancer application, sur les 2 instances EC2 correspondantes à l'application backend 
-
-
+*/
 module "alb" {
   source = "./alb"
   vpc_id = module.vpc.vpc_id

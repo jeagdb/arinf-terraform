@@ -70,6 +70,15 @@ resource "aws_security_group_rule" "inbound_http" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "custom_port_app" {
+  from_port         = 5000
+  protocol          = "tcp"
+  security_group_id = aws_security_group.alb-sg.id
+  to_port           = 5000
+  type              = "ingress"
+  cidr_blocks       = ["0.0.0.0/0"]
+}
+
 resource "aws_security_group_rule" "outbound_all" {
   from_port         = 0
   protocol          = "-1"
