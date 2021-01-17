@@ -2,7 +2,7 @@ resource "aws_elb" "app-elb" {
   name = "app-elb"
 
   subnets = var.subnets
-  security_groups = [var.security_group, aws_security_group.elb_sg.id]
+  security_groups = [aws_security_group.elb_sg.id]
 
   listener {
     instance_port = 80
@@ -46,5 +46,18 @@ resource "aws_security_group" "elb_sg" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
     description = "AWS default egress rule"
+  }
+    ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }
+    ingress {
+    description = "TLS from VPC"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }

@@ -1,15 +1,13 @@
+data "template_file" "init" {
+  template = file("${path.module}/userdata.tpl")
+}
+
 resource "aws_launch_configuration" "launch-config" {
-  image_id = "ami-0c3d23d707737957d"
+  image_id = "ami-0d3f551818b21ed81"
   instance_type = "t2.micro"
   security_groups = var.security_groups
 
-  user_data = <<-EOF
-              #!/bin/bash
-              yum -y install httpd
-              echo "Hello, from Terraform" > /var/www/html/index.html
-              service httpd start
-              chkconfig httpd on
-              EOF
+  user_data =  data.template_file.init.rendered
 
   lifecycle {
     create_before_destroy = true
@@ -19,7 +17,7 @@ resource "aws_launch_configuration" "launch-config" {
 resource "aws_autoscaling_group" "app-asg" {
   launch_configuration = aws_launch_configuration.launch-config.id
   vpc_zone_identifier = [var.subnet1, var.subnet2]
-  load_balancers = [var.elb]
+  target_group_arns = [var.target_group_arn]
   health_check_type = "ELB"
 
   min_size = 2

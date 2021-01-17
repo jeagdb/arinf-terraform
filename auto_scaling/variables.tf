@@ -8,4 +8,4 @@ variable "security_groups" {
 variable "subnet1" {}
 variable "subnet2" {}
 
-variable "elb" {}
+variable "target_group_arn" {}

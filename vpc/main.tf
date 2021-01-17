@@ -27,10 +27,10 @@ resource "aws_subnet" "public_subnet" {
 
 // PRIVATE SUBNETS
 resource "aws_subnet" "private_subnet" {
-  count = 4
+  count = 2
   cidr_block = var.private_cidrs[count.index]
   vpc_id = aws_vpc.main.id
-  availability_zone = data.aws_availability_zones.available.names[count.index % 2]
+  availability_zone = data.aws_availability_zones.available.names[count.index]
   tags = {
     Name = "private subnet ${count.index}"
   }
@@ -49,20 +49,20 @@ resource "aws_route_table" "public_route" {
     Name = "public route table"
   }
 }
-/*
+
 // table de routing privé
 resource "aws_route_table" "private_route" {
   vpc_id = aws_vpc.main.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.gw.id
+    nat_gateway_id = aws_nat_gateway.my-test-nat-gateway.id
   }
 
   tags = {
     Name = "private route table"
   }
-}*/
+}
 
 // Association routes publiques
 resource "aws_route_table_association" "public_subnet_assoc" {
@@ -72,14 +72,13 @@ resource "aws_route_table_association" "public_subnet_assoc" {
   depends_on = [aws_route_table.public_route, aws_subnet.public_subnet]
 }
 
-/*
 // Association routes privées
 resource "aws_route_table_association" "private_subnet_assoc" {
-  count = 4
+  count = 2
   route_table_id = aws_route_table.private_route.id
   subnet_id = aws_subnet.private_subnet.*.id[count.index]
   depends_on = [aws_route_table.private_route, aws_subnet.private_subnet]
-}*/
+}
 
 
 //pare-feu virtuel pour notre vpc afin de contrôler le trafic entrant et sortant.
@@ -105,12 +104,20 @@ resource "aws_security_group" "vpc_sg" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  /*
   ingress {
     description = "TLS from VPC"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
-  }*/
+  }
+}
+
+resource "aws_eip" "my-test-eip" {
+  vpc = true
+}
+
+resource "aws_nat_gateway" "my-test-nat-gateway" {
+  allocation_id = aws_eip.my-test-eip.id
+  subnet_id     = aws_subnet.public_subnet.0.id
 }

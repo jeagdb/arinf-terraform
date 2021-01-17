@@ -1,7 +1,7 @@
 resource "aws_lb_target_group" "alb-target-group" {
   health_check {
     interval            = 10
-    path                = "/"
+    path                = "/index.html"
     protocol            = "HTTP"
     timeout             = 5
     healthy_threshold   = 5
