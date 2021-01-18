@@ -1,6 +1,6 @@
 variable "vpc_id" {}
 
-
+variable "master_ip" {}
 variable "security_groups" {
   type = list
 }

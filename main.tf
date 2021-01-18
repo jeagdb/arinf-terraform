@@ -20,20 +20,22 @@ module "s3" {
 module "vpc" {
   source = "./vpc"
   vpc_cidr = "10.0.0.0/16"
-  public_cidrs = ["10.0.1.0/24", "10.0.2.0/24"]
-  private_cidrs = ["10.0.3.0/24", "10.0.4.0/24"]
+  public_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24"]
+  private_cidrs = ["10.0.5.0/24", "10.0.6.0/24"]
 }
 
-// instance ec2 -> ici qu'on va placer notre front
-/*
+// création de 2 instances ec2 -> ici qu'on va placer notre bdd
+
 module "ec2" {
   source = "./ec2"
   my_public_key = "./tmp/id_rsa.pub"
   instance_type = "t2.micro"
-  security_group = module.vpc.security_group
-  public_subnets = module.vpc.public_subnets
+  vpc_id = module.vpc.vpc_id
+  vpc_sg = module.vpc.security_group
+  public_subnet3 = module.vpc.subnet3
+  public_subnet4 = module.vpc.subnet4
 }
-*/
+
 module "alb" {
   source = "./alb"
   vpc_id = module.vpc.vpc_id
@@ -45,6 +47,7 @@ module "alb" {
 module "auto_scaling" {
   source = "./auto_scaling"
   vpc_id = module.vpc.vpc_id
+  master_ip = module.ec2.slave_db
   subnet1 = module.vpc.subnet1
   subnet2 = module.vpc.subnet2
   security_groups = [module.vpc.security_group]

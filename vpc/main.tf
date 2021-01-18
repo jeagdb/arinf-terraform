@@ -15,11 +15,11 @@ resource "aws_internet_gateway" "gw" {
 
 // PUBLIC SUBNETS
 resource "aws_subnet" "public_subnet" { 
-  count = 2
+  count = 4
   cidr_block = var.public_cidrs[count.index]
   vpc_id = aws_vpc.main.id
   map_public_ip_on_launch = true
-  availability_zone = data.aws_availability_zones.available.names[count.index]
+  availability_zone = data.aws_availability_zones.available.names[count.index % 2]
   tags = {
     Name = "public subnet ${count.index}"
   }
@@ -105,8 +105,8 @@ resource "aws_security_group" "vpc_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
     ingress {
-    from_port   = 5000
-    to_port     = 5000
+    from_port   = 3000
+    to_port     = 3000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

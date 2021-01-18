@@ -22,18 +22,10 @@ output "subnet2" {
   value = element(aws_subnet.public_subnet.*.id, 2 )
 }
 
-output "private_subnet1" {
-  value = element(aws_subnet.private_subnet.*.id, 1 )
+output "subnet3" {
+  value = element(aws_subnet.public_subnet.*.id, 3 )
 }
 
-output "private_subnet2" {
-  value = element(aws_subnet.private_subnet.*.id, 2 )
-}
-
-output "private_subnet3" {
-  value = element(aws_subnet.private_subnet.*.id, 3 )
-}
-
-output "private_subnet4" {
-  value = element(aws_subnet.private_subnet.*.id, 4 )
+output "subnet4" {
+  value = element(aws_subnet.public_subnet.*.id, 4 )
 }

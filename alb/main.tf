@@ -1,7 +1,7 @@
 resource "aws_lb_target_group" "alb-target-group" {
   health_check {
     interval            = 10
-    path                = "/index.html"
+    path                = "/"
     protocol            = "HTTP"
     timeout             = 5
     healthy_threshold   = 5
@@ -9,7 +9,7 @@ resource "aws_lb_target_group" "alb-target-group" {
   }
 
   name        = "alb-tg"
-  port        = 80
+  port        = 3000
   protocol    = "HTTP"
   target_type = "instance"
   vpc_id      = var.vpc_id
@@ -47,6 +47,17 @@ resource "aws_lb_listener" "alb-listner" {
   }
 }
 
+resource "aws_lb_listener" "alb-listner2" {
+  load_balancer_arn = aws_lb.app-alb.arn
+  port              = 3000
+  protocol          = "HTTP"
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb-target-group.arn
+  }
+}
+
 resource "aws_security_group" "alb-sg" {
   name   = "alb-sg"
   vpc_id = var.vpc_id
@@ -71,10 +82,10 @@ resource "aws_security_group_rule" "inbound_http" {
 }
 
 resource "aws_security_group_rule" "custom_port_app" {
-  from_port         = 5000
+  from_port         = 3000
   protocol          = "tcp"
   security_group_id = aws_security_group.alb-sg.id
-  to_port           = 5000
+  to_port           = 3000
   type              = "ingress"
   cidr_blocks       = ["0.0.0.0/0"]
 }

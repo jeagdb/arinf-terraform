@@ -1,5 +1,8 @@
 data "template_file" "init" {
   template = file("${path.module}/userdata.tpl")
+  vars = {
+    master = var.master_ip
+  }
 }
 
 resource "aws_launch_configuration" "launch-config" {
