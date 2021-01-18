@@ -9,7 +9,7 @@ echo "listen_addresses = '*'" | sudo tee -a /etc/postgresql/12/main/postgresql.c
 sudo tee -a /etc/postgresql/12/main/pg_hba.conf <<< "host    all             all             0.0.0.0/0        trust"
 sudo tee -a /etc/postgresql/12/main/pg_hba.conf <<< "host    all             all             ::/0                   md5"
 sudo /etc/init.d/postgresql restart
-sudo service postgres restart
+sudo service postgresql restart
 
 #sudo -i -u postgres psql -c "CREATE DATABASE books"
 #sudo -i -u postgres psql -c "CREATE USER user1 WITH ENCRYPTED PASSWORD 'user1234'"
