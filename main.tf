@@ -7,15 +7,6 @@ provider "aws" {
   version = "~> 2.0"
 }
 
-// déclaration des différents modules
-// bucket S3 pour héberger notre front react 
-// (! P3 !)
-/*
-module "s3" {
-  source = "./s3"
-}
-*/
-
 // vpc -> endroit isolé du cloud pour mettre en place des ressources aws dans un réseau virtuel
 module "vpc" {
   source = "./vpc"
@@ -25,7 +16,6 @@ module "vpc" {
 }
 
 // création de 2 instances ec2 -> ici qu'on va placer notre bdd
-
 module "ec2" {
   source = "./ec2"
   my_public_key = "./tmp/id_rsa.pub"
